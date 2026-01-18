@@ -1,12 +1,11 @@
 local owActionEventHandlers = require(script:WaitForChild("owActionEventHandlers"))
 local inCombatEventHandlers = require(script:WaitForChild("inCombatEventHandlers"))
 
-
-function regCombatEventHandlers()
+local function regCombatEventHandlers()
 	owActionEventHandlers.regOwActionEventHandlers()
 	inCombatEventHandlers.regInCombatEventHandlers()
 end
 
 return {
-	regCombatEventHandlers = regCombatEventHandlers
+	regCombatEventHandlers = regCombatEventHandlers,
 }
