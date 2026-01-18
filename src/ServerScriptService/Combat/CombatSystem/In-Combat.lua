@@ -18,6 +18,22 @@ local battleArenas = {}
 
 local IC = {}
 
+local function onCombatActionActivated(player, action, ...) -- when player clicks a move button
+	local playerDataFolder = player:FindFirstChild(playerData.FolderName)
+	if not playerDataFolder then warn("Player data folder missing for", player); return end
+	
+	local isCurrentTurn = playerDataFolder:FindFirstChild(playerData.isCurrentTurn.name)
+	if not isCurrentTurn then warn("isCurrentTurn value missing for", player); return end
+	
+	--if not isCurrentTurn.Value then return end
+	
+	local context = {
+		player = player
+	}
+	
+	EventDispatcher:Dispatch(action, context, ...)
+end
+
 function IC:InitCombat(context)
 	local playerId = tostring(context.player.UserId)
 	
@@ -62,13 +78,13 @@ end
 
 function IC:EndCombat(player)
 	local playerDataFolder = player:FindFirstChild(playerData.FolderName)
-	if not playerDataFolder then warn("Player data folder missing for", player) return end
+	if not playerDataFolder then warn("Player data folder missing for", player); return end
 
 	local isInCombat = playerDataFolder:FindFirstChild(playerData.isInCombat.name)
-	if not isInCombat then warn("isInCombat value not found for", player) return end
+	if not isInCombat then warn("isInCombat value not found for", player); return end
 
 	local owCanAttack = playerDataFolder:FindFirstChild(playerData.owCanAttack.name)
-	if not owCanAttack then warn("owCanAttack value not found for", player) return end
+	if not owCanAttack then warn("owCanAttack value not found for", player); return end
 	
 	local playerId = tostring(player.UserId)
 	
@@ -77,9 +93,9 @@ function IC:EndCombat(player)
 	for _, opponent in ipairs(opponents) do
 		local valuesFolder = opponent:FindFirstChild(mobsData.Values.valuesFolder.name)
 		
-		local isInCombat = valuesFolder:FindFirstChild(mobsData.Values.isInCombat.name)
+		local opponentIsInCombat = valuesFolder:FindFirstChild(mobsData.Values.isInCombat.name)
 		
-		isInCombat.Value = false
+		opponentIsInCombat.Value = false
 	end
 	
 	if script["In-CombatTest"].Value then
@@ -123,14 +139,15 @@ function initButtons(player)
 	CombatActionEvent:FireClient(player, eventsData.GUI.InitMoveButtons, moveButtons)
 	
 	-- initiating item buttons (not done)
-	local items = {}
+	--local items = {}
 	
 end
 
 function cleanupButtons(player)
-	local playerDataFolder = player:FindFirstChild(playerData.FolderName)
-	local playerClass = playerDataFolder:FindFirstChild(playerData.Class.name)
-	local playerClassMoves = movesData.ClassMoves[playerClass.Value]
+   -- unused for now
+	-- local playerDataFolder = player:FindFirstChild(playerData.FolderName)
+	-- local playerClass = playerDataFolder:FindFirstChild(playerData.Class.name)
+	-- local playerClassMoves = movesData.ClassMoves[playerClass.Value]
 
 	local playergui = player:FindFirstChildWhichIsA("PlayerGui")
 	local combatgui = playergui:FindFirstChild("Combat")
@@ -184,23 +201,6 @@ function cleanupConnections(playerId)
 			print("Conns:", conns)
 		end
 	end
-end
-
-function onCombatActionActivated(player, action, ...) -- when player clicks a move button
-	local playerDataFolder = player:FindFirstChild(playerData.FolderName)
-	if not playerDataFolder then warn("Player data folder missing for", player) return end
-	
-	local isCurrentTurn = playerDataFolder:FindFirstChild(playerData.isCurrentTurn.name)
-	if not isCurrentTurn then warn("isCurrentTurn value missing for", player) return end
-	
-	
-	--if not isCurrentTurn.Value then return end
-	
-	local context = {
-		player = player
-	}
-	
-	EventDispatcher:Dispatch(action, context, ...)
 end
 	
 return IC
