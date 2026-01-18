@@ -12,4 +12,7 @@ return {
     "611", -- Line consists of nothing but whitespace
     "612", -- Line contains trailing whitespace
   },
+  exclude_files = {
+    "src/ReplicatedStorage/Modules/**",
+  },
 }
