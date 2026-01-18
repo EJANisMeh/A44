@@ -7,7 +7,7 @@ local eventsData = require(ReplicatedStorage.Data:WaitForChild("EventsData"))
 
 local EventDispatcher = require(ServerScriptService.EventDispatcher)
 
-function getNearbyMobs(mobHit)
+local function getNearbyMobs(mobHit)
 	local mobsFolder = mobHit.Parent
 	local nearbyMobs = {}
 	for i, mob in pairs(mobsFolder:GetChildren()) do
@@ -26,22 +26,22 @@ local encounter = {}
 
 function encounter.StartEncounter(player, mob)
 	local playerDataFolder = player:FindFirstChild(playerData.FolderName)
-	if not playerDataFolder then warn("PlayerData folder not found in", player) return end
+	if not playerDataFolder then warn("PlayerData folder not found in", player); return end
 	
 	local playerIsInCombat = playerDataFolder:FindFirstChild(playerData.isInCombat.name)
-	if not playerIsInCombat then warn("isInCombat is not found on", player) return end
+	if not playerIsInCombat then warn("isInCombat is not found on", player); return end
 	
 	local playerOwCanAttack = playerDataFolder:FindFirstChild(playerData.owCanAttack.name)
-	if not playerOwCanAttack then warn("owCanAttack value not found for", player) return end
+	if not playerOwCanAttack then warn("owCanAttack value not found for", player); return end
 
 	local mobValuesFolder = mob:FindFirstChild(mobsData.Values.valuesFolder.name)
-	if not mobValuesFolder then warn("ValuesFolder not found in", mob) return end
+	if not mobValuesFolder then warn("ValuesFolder not found in", mob); return end
 
 	local mobName = mobValuesFolder:FindFirstChild(mobsData.Values.MobName.name)
-	if not mobName then warn("MobName not found in", mob) return end
+	if not mobName then warn("MobName not found in", mob); return end
 	
 	local mobIsInCombat = mobValuesFolder:FindFirstChild(mobsData.Values.isInCombat.name)
-	if not mobIsInCombat then warn("isInCombat not found in", mob) return end
+	if not mobIsInCombat then warn("isInCombat not found in", mob); return end
 	
 	
 	if mobIsInCombat.Value then return end
@@ -52,19 +52,21 @@ function encounter.StartEncounter(player, mob)
 	
 	local nearbyMobs = getNearbyMobs(mob)
 	
-	-- remove nearby mobs in battle and set the remaining nearby mobs isInCombat value to true
-	for i, nearbyMob in nearbyMobs do
+	-- remove nearby mobs already in battle and mark remaining nearby mobs as in-combat
+	for i = #nearbyMobs, 1, -1 do
+		local nearbyMob = nearbyMobs[i]
+
 		local nearbyMobValuesFolder = nearbyMob:FindFirstChild(mobsData.Values.valuesFolder.name)
-		if not nearbyMobValuesFolder then warn("ValuesFolder not found in", mob) return end
-		
+		if not nearbyMobValuesFolder then warn("ValuesFolder not found in", nearbyMob); return end
+
 		local nearbyMobIsInCombat = nearbyMobValuesFolder:FindFirstChild(mobsData.Values.isInCombat.name)
-		if not nearbyMobIsInCombat then warn("isInCombat not found in", mob) return end
-		
+		if not nearbyMobIsInCombat then warn("isInCombat not found in", nearbyMob); return end
+
 		if nearbyMobIsInCombat.Value then
-			table.remove(nearbyMobs, table.find(nearbyMobs, nearbyMob))
+			table.remove(nearbyMobs, i)
+		else
+			nearbyMobIsInCombat.Value = true
 		end
-		
-		nearbyMobIsInCombat.Value = true
 	end
 	
 	
