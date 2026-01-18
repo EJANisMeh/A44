@@ -1,39 +1,42 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local animationsData = require(ReplicatedStorage.Data:WaitForChild("AnimationsData"))
+-- commented out since not currently used
+-- local ReplicatedStorage = game:GetService("ReplicatedStorage")
+-- local animationsData = require(ReplicatedStorage.Data:WaitForChild("AnimationsData"))
 local kill = 1
-local ClassData = {}
 
-ClassData["HolyStrike"] = {
-	M1Animation = "rbxassetid://82989510582963" ,
-	cooldown = 3 ,
-	damage = 4,
-}
+-- maybe for future use
+-- local ClassData = {}
 
-ClassData["DarkSlash"] = {
+-- ClassData["HolyStrike"] = {
+-- 	M1Animation = "rbxassetid://82989510582963" ,
+-- 	cooldown = 3 ,
+-- 	damage = 4,
+-- }
+
+-- ClassData["DarkSlash"] = {
 	
-}
+-- }
 
-ClassData["WindBlade"] = {
-	damage = 3,
-	cooldown = 2
-}
+-- ClassData["WindBlade"] = {
+-- 	damage = 3,
+-- 	cooldown = 2
+-- }
 
-ClassData["TheReaper"] = {
-	damage = 10,
-	cooldown = (kill == true and 0 or nil)
-}
+-- ClassData["TheReaper"] = {
+-- 	damage = 10,
+-- 	cooldown = (kill == true and 0 or nil)
+-- }
 
-ClassData["Reaper's Execution"] = {
-	damage = 30,
-	energy = 6,
-	cooldown = 7
-}
+-- ClassData["Reaper's Execution"] = {
+-- 	damage = 30,
+-- 	energy = 6,
+-- 	cooldown = 7
+-- }
 
-ClassData["Tainted Blade"] = {
-	damage = 15,
-	energy = 3,
-	cooldown = 4
-}
+-- ClassData["Tainted Blade"] = {
+-- 	damage = 15,
+-- 	energy = 3,
+-- 	cooldown = 4
+-- }
 
 -- moves
 
