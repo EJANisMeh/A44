@@ -15,6 +15,6 @@ return {
 	},
 
 	["Monk"] = {
-		
+      -- Blank
 	},
 }
